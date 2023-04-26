@@ -1,10 +1,8 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Text, DateTime, MetaData
-from sqlalchemy.orm import relationship, sessionmaker, declarative_base
+from sqlalchemy import Column, Integer, String, ForeignKey, Text, DateTime
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql.functions import now
 
-connection = "postgresql://username:1234@localhost/blog"
-engine = create_engine(connection)
-Base = declarative_base()
+from utils.db import Base
 
 
 class Post(Base):

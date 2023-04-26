@@ -1,11 +1,24 @@
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
+
 
 load_dotenv()
 
-DB_USER = os.environ.get("DB_USER")
-DB_PASS = os.environ.get("DB_PASS")
-DB_NAME = os.environ.get("DB_NAME")
 
-# sqlalchemy.url = postgresql://%(DB_USER)s:%(DB_PASS)s@localhost/%(DB_NAME)s
+class DataBaseConfig:
+    USER = os.getenv("DB_USER")
+    PASS = os.getenv("DB_PASS")
+    PORT = os.getenv("DB_PORT")
+    HOST = os.getenv("DB_HOST")
+    NAME = os.getenv("DB_NAME")
+    pg_driver = 'asyncpg'
+
+    ASYNC_URL = f"postgresql+{pg_driver}://{USER}:{PASS}@localhost/{NAME}"
+    URL = f"postgresql://{USER}:{PASS}@localhost/{NAME}"
+
+
+class JWTConfig:
+    SECRET = os.getenv("SECRET")
+
+
 

@@ -1,8 +1,8 @@
-"""3
+"""posts
 
-Revision ID: d14e2bd75ded
-Revises: 
-Create Date: 2023-04-12 21:22:31.014912
+Revision ID: 01
+Revises: 00
+Create Date: 2023-04-19 22:27:08.934189
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'd14e2bd75ded'
-down_revision = None
+revision = '01'
+down_revision = '00'
 branch_labels = None
 depends_on = None
 
@@ -22,7 +22,7 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('title', sa.String(length=60), nullable=False),
     sa.Column('text', sa.Text(), nullable=False),
-    sa.Column('date', sa.DateTime(), nullable=True),
+    sa.Column('date', sa.DateTime(), server_default='now()', nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('tag',

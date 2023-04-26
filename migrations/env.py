@@ -1,13 +1,11 @@
-from logging.config import fileConfig
-
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-
 from alembic import context
 
-from db import Base, engine, Post, Tags, AssociationPostTags
+from utils.db import Base, engine
 
-config = context.config
+from posts.models import Post, Tags, AssociationPostTags
+from users.models import User
+
+
 target_metadata = Base.metadata
 
 
