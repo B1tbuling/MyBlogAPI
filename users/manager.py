@@ -1,8 +1,6 @@
-import uuid
-from typing import Optional
-
 from fastapi import Depends, Request
 from fastapi_users import BaseUserManager, UUIDIDMixin, IntegerIDMixin
+from typing import Optional
 
 from .models import User, get_user_db
 import config
@@ -31,3 +29,4 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
 
 async def get_user_manager(user_db=Depends(get_user_db)):
     yield UserManager(user_db)
+

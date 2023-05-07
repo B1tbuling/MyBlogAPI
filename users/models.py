@@ -3,17 +3,14 @@ from typing import AsyncGenerator
 from fastapi import Depends
 from fastapi_users.db import SQLAlchemyUserDatabase
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import Column, Integer, String, ForeignKey, Text, DateTime
 
 from utils.db import Base, async_session
 
 
-class User(Base, SQLAlchemyBaseUserTable[int]):
+class User(SQLAlchemyBaseUserTable[int], Base):
     id = Column(Integer, nullable=False, primary_key=True)
-    username = Column(String(20), nullable=False, unique=True)
-    first_name = Column(String(40), nullable=False)
-    last_name = Column(String(40), nullable=False)
 
 
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
