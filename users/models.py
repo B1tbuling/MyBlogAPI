@@ -11,6 +11,9 @@ from utils.db import Base, async_session
 
 class User(SQLAlchemyBaseUserTable[int], Base):
     id = Column(Integer, nullable=False, primary_key=True)
+    first_name = Column(String(length=20), nullable=False)
+    last_name = Column(String(length=30), nullable=False)
+    username = Column(String(length=20), nullable=False, unique=True)
 
 
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:

@@ -1,10 +1,11 @@
-from fastapi_users.authentication import CookieTransport, AuthenticationBackend
+from fastapi_users.authentication import CookieTransport, AuthenticationBackend, BearerTransport
 from fastapi_users.authentication import JWTStrategy
 
 import config
 
 
 cookie_transport = CookieTransport(cookie_max_age=3600)
+
 
 SECRET = config.JWTConfig.SECRET
 
