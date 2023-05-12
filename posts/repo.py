@@ -1,5 +1,6 @@
 from fastapi import HTTPException
 from sqlalchemy import select, insert, update, delete
+from sqlalchemy.orm import joinedload
 
 from posts.schemas import CommentsRead
 from users.models import User
@@ -54,25 +55,12 @@ class PostRepo:
 class CommentRepo:
     async def get_list(self, id: int) -> list[CommentsRead]:
         session = await get_async_db()
-        # async with session.begin():
-        query = select(CommentPost, User.first_name, User.last_name, User.username). \
-            join(User, CommentPost.user_id == User.id).where(CommentPost.post_id == id)
+        query = select(CommentPost) \
+            .options(joinedload(CommentPost.user)) \
+            .where(CommentPost.post_id == id)
+
         result = await session.execute(query)
-        data = result.all()
-        comment_list = []
-        for item in data:
-            comment_list.append(
-                CommentsRead(
-                    id=item[0].id,
-                    text=item[0].text,
-                    user=UserProfileInfo(
-                        first_name=item[1],
-                        last_name=item[2],
-                        username=item[3]
-                    )
-                )
-            )
-        return comment_list
+        return [CommentsRead.from_orm(item) for item in result.scalars().all()]
 
     async def create(self, id: int, text: str, user: User) -> Post:
         session = await get_async_db()
