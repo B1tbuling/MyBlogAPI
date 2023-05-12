@@ -2,18 +2,18 @@ from fastapi import HTTPException
 from posts.repo import PostRepo, CommentRepo
 
 from posts.models import Post, CommentPost
-from posts.schemas import CommentsRead
+from posts.schemas import CommentsSchemas
 from users.models import User
-
-
-async def get_all_posts() -> list[Post]:
-    return await PostRepo().get_list()
 
 
 async def get_one_post(id: int) -> Post:
     if post := await PostRepo().get_one(id):
         return post
-    raise HTTPException(404)
+    raise HTTPException(404, detail="Posts not found")
+
+
+async def get_all_posts() -> list[Post]:
+    return await PostRepo().get_list()
 
 
 async def create_post(title: str, text: str, user: User) -> Post:
@@ -38,7 +38,7 @@ async def delete_post(id: int, user: User):
     return await PostRepo().delete(id)
 
 
-async def get_comments_list(id: int) -> list[CommentsRead]:
+async def get_comments_list(id: int) -> list[CommentsSchemas]:
     return await CommentRepo().get_list(id)
 
 

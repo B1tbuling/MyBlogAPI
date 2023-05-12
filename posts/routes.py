@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
 from users.routes import current_user, fastapi_users
-from .schemas import PostData, PostBaseData, CommentsRead, CommentCreate
+from .schemas import PostData, PostBaseData, CommentsSchemas, CommentCreate
 from .services import *
 
 router = APIRouter()
@@ -32,7 +32,7 @@ async def delete_posts(id: int, user=Depends(current_user)):
     return await delete_post(id, user)
 
 
-@router.get("/posts/{id}/comments", response_model=list[CommentsRead])
+@router.get("/posts/{id}/comments", response_model=list[CommentsSchemas])
 async def get_comments(id: int):
     return await get_comments_list(id)
 

@@ -18,7 +18,7 @@ class PostBaseData(BaseModel):
 class PostData(PostID, PostBaseData): ...
 
 
-class CommentsRead(BaseModel):
+class CommentsSchemas(BaseModel):
     id: int = None
     text: str = None
     user: UserProfileInfo
