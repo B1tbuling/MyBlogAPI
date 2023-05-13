@@ -1,13 +1,10 @@
 from pydantic import BaseModel
 
 from users.schemas import UserProfileInfo
+from utils.base_schemas import IDSchema
 
 
-class PostID(BaseModel):
-    id: int = None
-
-
-class PostBaseData(BaseModel):
+class PostDataSchema(BaseModel):
     title: str = None
     text: str = None
 
@@ -15,21 +12,19 @@ class PostBaseData(BaseModel):
         orm_mode = True
 
 
-class PostData(PostID, PostBaseData): ...
+class PostSchema(IDSchema, PostDataSchema):
+    user_id: int
 
 
-class CommentsSchemas(BaseModel):
-    id: int = None
+class CommentDataSchema(BaseModel):
     text: str = None
-    user: UserProfileInfo
 
     class Config:
         orm_mode = True
 
 
-class CommentCreate(BaseModel):
-    post_id: int = None
-    text: str = None
+class CommentSchema(IDSchema, CommentDataSchema):
+    user: UserProfileInfo
 
 
 

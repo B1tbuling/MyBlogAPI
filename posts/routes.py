@@ -1,43 +1,43 @@
 from fastapi import APIRouter, Depends
 
-from users.routes import current_user, fastapi_users
-from .schemas import PostData, PostBaseData, CommentsSchemas, CommentCreate
+from users.routes import current_user
 from .services import *
 
 router = APIRouter()
 
 
-@router.get("/posts", response_model=list[PostData])
+@router.post("/posts", status_code=201, response_model=PostSchema)
+async def create_posts(post: PostDataSchema, user=Depends(current_user)):
+    return await create_post(post=post, user=user)
+
+
+@router.get("/posts", response_model=list[PostSchema])
 async def get_posts():
     return await get_all_posts()
 
 
-@router.get("/posts/{id}", response_model=PostData)
+@router.get("/posts/{id}", response_model=PostSchema)
 async def get_post(id: int):
-    return await get_one_post(id)
+    return await get_one_post(id=id)
 
 
-@router.post("/posts/create")
-async def create_posts(post: PostBaseData, user=Depends(current_user)):
-    return await create_post(post.title, post.text, user)
+@router.put("/posts/{id}", response_model=PostSchema)
+async def update_posts(id: int, post: PostDataSchema, user=Depends(current_user)):
+    return await update_post(id=id, post=post, user=user)
 
 
-@router.post("/posts/update/{id}")
-async def update_posts(id: int, post: PostBaseData, user=Depends(current_user)):
-    return await update_post(id, post.title, post.text, user)
-
-
-@router.delete("/posts/delete/{id}")
+@router.delete("/posts/{id}", status_code=204)
 async def delete_posts(id: int, user=Depends(current_user)):
-    return await delete_post(id, user)
+    await delete_post(id=id, user=user)
 
 
-@router.get("/posts/{id}/comments", response_model=list[CommentsSchemas])
-async def get_comments(id: int):
-    return await get_comments_list(id)
+# Comments
+
+@router.post("/posts/{post_id}/comments", status_code=201)
+async def create_comment(comment: CommentDataSchema, post_id: int, user=Depends(current_user)):
+    return await create_comment(post_id=post_id, comment=comment, user=user)
 
 
-@router.post("/posts/{id}/comments/create")
-async def create_comment(comment: CommentCreate, id: int, user=Depends(current_user)):
-    return await create_comment(id, comment.text, user)
-
+@router.get("/posts/{post_id}/comments", response_model=list[CommentSchema])
+async def get_comments(post_id: int):
+    return await get_comments_list(post_id=post_id)
