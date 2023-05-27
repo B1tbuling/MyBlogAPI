@@ -7,6 +7,7 @@ from users.models import User
 from users.schemas import *
 from users.services import get_profile_info
 
+
 auth_router = APIRouter(prefix="/auth", tags=["auth"])
 user_router = APIRouter(prefix="/users", tags=["users"])
 

@@ -1,8 +1,8 @@
 from fastapi import HTTPException
-from posts.repo import PostRepo, CommentRepo
 
 from posts.models import CommentPost
-from posts.schemas import CommentSchema, CommentDataSchema, PostDataSchema, PostSchema
+from posts.repo import CommentRepo, PostRepo
+from posts.schemas import CommentDataSchema, CommentSchema, PostDataSchema, PostSchema
 from users.models import User
 
 

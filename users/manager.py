@@ -1,9 +1,11 @@
-from fastapi import Depends, Request
-from fastapi_users import BaseUserManager, UUIDIDMixin, IntegerIDMixin
 from typing import Optional
 
-from .models import User, get_user_db
+from fastapi import Depends, Request
+from fastapi_users import BaseUserManager, IntegerIDMixin, UUIDIDMixin
+
 import config
+
+from .models import User, get_user_db
 
 
 SECRET = config.JWTConfig

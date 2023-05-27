@@ -1,10 +1,9 @@
-from sqlalchemy import select, insert, update, delete
+from sqlalchemy import delete, insert, select, update
 from sqlalchemy.orm import joinedload
 
-from posts.schemas import CommentSchema, CommentDataSchema, PostDataSchema, PostSchema
+from posts.models import CommentPost, Post
+from posts.schemas import CommentDataSchema, CommentSchema, PostDataSchema, PostSchema
 from utils.base_repo import BaseRepo
-
-from posts.models import Post, CommentPost
 from utils.db import get_async_db
 
 

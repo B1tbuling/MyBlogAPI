@@ -3,8 +3,8 @@ from typing import AsyncGenerator
 from fastapi import Depends
 from fastapi_users.db import SQLAlchemyUserDatabase
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import Column, Integer, String, ForeignKey, Text, DateTime
 
 from utils.db import Base, async_session
 

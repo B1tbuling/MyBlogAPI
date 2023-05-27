@@ -1,5 +1,4 @@
-from fastapi_users.authentication import CookieTransport, AuthenticationBackend, BearerTransport
-from fastapi_users.authentication import JWTStrategy
+from fastapi_users.authentication import AuthenticationBackend, BearerTransport, CookieTransport, JWTStrategy
 
 import config
 

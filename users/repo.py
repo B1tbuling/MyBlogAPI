@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from sqlalchemy import select, insert, update, delete
+from sqlalchemy import delete, insert, select, update
 
 from users.models import User
 from utils.db import get_async_db
