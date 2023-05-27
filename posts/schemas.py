@@ -5,8 +5,8 @@ from utils.base_schemas import IDSchema
 
 
 class PostDataSchema(BaseModel):
-    title: str = None
-    text: str = None
+    title: str | None = None
+    text: str | None = None
 
 
 class PostSchema(IDSchema, PostDataSchema):
@@ -17,7 +17,7 @@ class PostSchema(IDSchema, PostDataSchema):
 
 
 class CommentDataSchema(BaseModel):
-    text: str = None
+    text: str | None = None
 
 
 class CommentSchema(IDSchema, CommentDataSchema):
@@ -25,6 +25,3 @@ class CommentSchema(IDSchema, CommentDataSchema):
 
     class Config:
         orm_mode = True
-
-
-

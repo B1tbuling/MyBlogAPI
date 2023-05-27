@@ -3,7 +3,6 @@ from sqlalchemy.orm import joinedload
 
 from posts.models import CommentPost, Post
 from posts.schemas import CommentDataSchema, CommentSchema, PostDataSchema, PostSchema
-from utils.base_repo import BaseRepo
 from utils.db import get_async_db
 
 
@@ -11,9 +10,11 @@ class PostRepo:
     async def create(self, post: PostDataSchema, user_id: int) -> PostDataSchema:
         session = await get_async_db()
         async with session.begin():
-            query = insert(Post) \
-                .values(title=post.title, text=post.text, user_id=user_id) \
+            query = (
+                insert(Post)
+                .values(title=post.title, text=post.text, user_id=user_id)
                 .returning(Post)
+            )
 
             result = await session.execute(query)
             return PostSchema.from_orm(result.scalar())
@@ -33,10 +34,12 @@ class PostRepo:
     async def update(self, id: int, post: PostDataSchema) -> PostSchema:
         session = await get_async_db()
         async with session.begin():
-            query = update(Post) \
-                .values(title=post.title, text=post.text) \
-                .where(Post.id == id) \
+            query = (
+                update(Post)
+                .values(title=post.title, text=post.text)
+                .where(Post.id == id)
                 .returning(Post)
+            )
 
             result = await session.execute(query)
             return PostSchema.from_orm(result.scalar())
@@ -49,20 +52,27 @@ class PostRepo:
 
 
 class CommentRepo:
-    async def create(self, post_id: int, comment: CommentDataSchema, user_id: int) -> Post:
+    async def create(
+        self, post_id: int, comment: CommentDataSchema, user_id: int
+    ) -> Post:
         session = await get_async_db()
         async with session.begin():
-            query = insert(CommentPost).values(text=comment.text, post_id=post_id, user_id=user_id).returning(CommentPost.id)
+            query = (
+                insert(CommentPost)
+                .values(text=comment.text, post_id=post_id, user_id=user_id)
+                .returning(CommentPost.id)
+            )
             print(query)
             result = await session.execute(query)
             return result.scalar()
 
     async def get_list(self, post_id: int) -> list[CommentSchema]:
         session = await get_async_db()
-        query = select(CommentPost) \
-            .options(joinedload(CommentPost.user)) \
+        query = (
+            select(CommentPost)
+            .options(joinedload(CommentPost.user))
             .where(CommentPost.post_id == post_id)
+        )
 
         result = await session.execute(query)
         return [CommentSchema.from_orm(item) for item in result.scalars().all()]
-

@@ -1,0 +1,56 @@
+[tool.ruff]
+line-length = 120
+
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "N",    # naming
+    "B",    # bug-bear
+    "UP",   # pyupgrade
+    "C4",   # comprehations
+    "RET",  # returns
+    "SIM",  # simplify
+]
+
+ignore = [
+    "E712",   # avaible var == False/True, required for sqlalchemy
+    "E711",   # avaible var == None, required for sqlalchemy
+    "RET503", # dont require return None in the functions
+    "N818",   # don't require to name Exceptions with suffix Error
+]
+
+[tool.ruff.isort]
+lines-after-imports = 2
+
+[tool.ruff.pep8-naming]
+classmethod-decorators = ["pydantic.validator"]
+
+[tool.ruff.flake8-bugbear]
+extend-immutable-calls = ["fastapi.Depends", "fastapi.Query", "fastapi.Path", "fastapi.Form", "fastapi.Body"]
+
+[tool.black]
+line-lenght = 120
+target-version = ["py310"]
+
+[tool.mypy]
+plugins = [
+  "pydantic.mypy",
+  "sqlalchemy.ext.mypy.plugin",
+]
+
+follow_imports = "silent"
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_any_generics = true
+check_untyped_defs = true
+no_implicit_reexport = true
+ignore_missing_imports = true
+implicit_reexport = true
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+warn_untyped_fields = true
