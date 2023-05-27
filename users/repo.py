@@ -4,8 +4,6 @@ from sqlalchemy import select, insert, update, delete
 from users.models import User
 from utils.db import get_async_db
 
-from posts.models import Post
-
 
 class UserRepo:
     async def get_profile(self, user):

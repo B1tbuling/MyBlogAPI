@@ -8,6 +8,7 @@ router = APIRouter()
 
 @router.post("/posts", status_code=201, response_model=PostSchema)
 async def create_posts(post: PostDataSchema, user=Depends(current_user)):
+    print(user.id)
     return await create_post(post=post, user=user)
 
 

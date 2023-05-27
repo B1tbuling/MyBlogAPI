@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from fastapi_users import FastAPIUsers
 
-from users.cookie import auth_backend
+from users.auth import auth_backend
 from users.manager import get_user_manager
 from users.models import User
 from users.schemas import *
