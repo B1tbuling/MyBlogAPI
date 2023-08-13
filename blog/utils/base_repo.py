@@ -1,4 +1,4 @@
-from utils.db import get_async_db
+from blog.utils.db import get_async_db
 
 
 class BaseRepo:

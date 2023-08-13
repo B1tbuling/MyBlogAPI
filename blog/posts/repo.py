@@ -1,9 +1,10 @@
 from sqlalchemy import delete, insert, select, update
 from sqlalchemy.orm import joinedload
-
-from posts.models import CommentPost, Post
-from posts.schemas import CommentDataSchema, CommentSchema, PostDataSchema, PostSchema
+from sqlalchemy.sql.functions import now
 from utils.db import get_async_db
+
+from .models import CommentPost, Post
+from .schemas import CommentDataSchema, CommentSchema, PostDataSchema, PostSchema
 
 
 class PostRepo:
@@ -52,9 +53,7 @@ class PostRepo:
 
 
 class CommentRepo:
-    async def create(
-        self, post_id: int, comment: CommentDataSchema, user_id: int
-    ) -> Post:
+    async def create(self, post_id: int, comment: CommentDataSchema, user_id: int) -> CommentSchema:
         session = await get_async_db()
         async with session.begin():
             query = (
@@ -62,9 +61,18 @@ class CommentRepo:
                 .values(text=comment.text, post_id=post_id, user_id=user_id)
                 .returning(CommentPost.id)
             )
-            print(query)
             result = await session.execute(query)
             return result.scalar()
+
+    async def get_one(self, comment_id: int) -> CommentSchema:
+        session = await get_async_db()
+        query = (
+            select(CommentPost)
+            .options(joinedload(CommentPost.user))
+            .where(CommentPost.id == comment_id)
+        )
+        result = await session.execute(query)
+        return CommentSchema.from_orm(result.scalar())
 
     async def get_list(self, post_id: int) -> list[CommentSchema]:
         session = await get_async_db()
@@ -73,6 +81,20 @@ class CommentRepo:
             .options(joinedload(CommentPost.user))
             .where(CommentPost.post_id == post_id)
         )
-
         result = await session.execute(query)
         return [CommentSchema.from_orm(item) for item in result.scalars().all()]
+
+    async def update(self, comment_id: int, comment: CommentDataSchema) -> None:
+        session = await get_async_db()
+        async with session.begin():
+            query = update(CommentPost) \
+                .values(text=comment.text, update_time=now()) \
+                .where(CommentPost.id == comment_id)
+
+            await session.execute(query)
+
+    async def delete(self, comment_id: int) -> None:
+        session = await get_async_db()
+        async with session.begin():
+            query = delete(CommentPost).where(CommentPost.id == comment_id)
+            await session.execute(query)

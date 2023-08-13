@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-
 from users.schemas import UserProfileInfo
 from utils.base_schemas import IDSchema
 
@@ -21,6 +20,7 @@ class CommentDataSchema(BaseModel):
 
 
 class CommentSchema(IDSchema, CommentDataSchema):
+
     user: UserProfileInfo
 
     class Config:

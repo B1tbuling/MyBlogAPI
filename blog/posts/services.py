@@ -1,9 +1,9 @@
 from fastapi import HTTPException
-
-from posts.models import CommentPost
-from posts.repo import CommentRepo, PostRepo
-from posts.schemas import CommentDataSchema, CommentSchema, PostDataSchema, PostSchema
 from users.models import User
+
+from .models import CommentPost
+from .repo import CommentRepo, PostRepo
+from .schemas import CommentDataSchema, CommentSchema, PostDataSchema, PostSchema
 
 
 async def create_post(post: PostDataSchema, user: User) -> PostDataSchema:
@@ -41,11 +41,27 @@ async def delete_post(id: int, user: User) -> None:
 # Comments
 
 
-async def create_comment(
-    post_id: int, comment: CommentDataSchema, user: User
-) -> CommentPost:
+async def create_comment(post_id: int, comment: CommentDataSchema, user: User) -> CommentPost:
     return await CommentRepo().create(post_id=post_id, comment=comment, user_id=user.id)
 
 
 async def get_comments_list(post_id: int) -> list[CommentSchema]:
     return await CommentRepo().get_list(post_id=post_id)
+
+
+async def update_comment(comment_id: int, comment: CommentDataSchema, user: User) -> None:
+    comment_before_update = await CommentRepo().get_one(comment_id)
+    if not comment_before_update:
+        raise HTTPException(404)
+    if comment_before_update.user.id != user.id:
+        raise HTTPException(403, detail="This comment cannot be updated by this user")
+    await CommentRepo().update(comment_id=comment_id, comment=comment)
+
+
+async def delete_comment(comment_id: int, user: User) -> None:
+    comment = await CommentRepo().get_one(comment_id)
+    if not comment:
+        raise HTTPException(404)
+    if comment.user.id != user.id:
+        raise HTTPException(403, detail="This comment cannot be deleted by this user")
+    await CommentRepo().delete(comment_id=comment_id)

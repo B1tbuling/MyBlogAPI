@@ -1,7 +1,6 @@
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.functions import now
-
 from utils.db import Base
 
 
@@ -37,6 +36,7 @@ class CommentPost(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     text = Column(Text, nullable=False)
     date_create = Column(DateTime, server_default="now()", default=now())
+    date_update = Column(DateTime, nullable=True)
     post_id = Column(Integer, ForeignKey("post.id"))
     post = relationship("Post", backref="comments")
     user_id = Column(Integer, ForeignKey("user.id"))

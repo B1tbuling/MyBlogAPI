@@ -1,9 +1,5 @@
 from alembic import context
-
 from utils.db import Base, engine
-
-from posts.models import Post, Tags, AssociationPostTags
-from users.models import User
 
 
 target_metadata = Base.metadata
